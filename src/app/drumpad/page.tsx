@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { FC } from 'react'
 
-export const Drumpad: FC = () => {
+const Drumpad: FC = () => {
   return (
     <div className='min-h-screen p-6'>
       <Link href='/' className='flex gap-4 items-center'>
