@@ -18,6 +18,14 @@ const sounds: Record<number, { name: string; sound: string }> = {
     name: 'Tom',
     sound: '/sounds/tom.mp3',
   },
+  4: {
+    name: 'Kick20',
+    sound: '/sounds/Kick_20_828.wav',
+  },
+  5: {
+    name: 'TapeKick',
+    sound: '/sounds/TapeKicks_506_SP_31.wav',
+  },
 }
 
 // Обработка GET-запроса

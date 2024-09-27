@@ -4,6 +4,7 @@
 
   &:hover {
     translate: 0 -5px;
+    background: linear-gradient(to bottom, rgba(153, 0, 255, 0.5), rgba(248, 248, 248, 0.5));
   }
 
   &::after {

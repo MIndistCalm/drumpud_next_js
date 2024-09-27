@@ -1,11 +1,17 @@
 'use client'
 
 import Link from 'next/link'
-import React, { FC, useEffect, useState } from 'react'
-import { SoundButton } from './ui'
+import React, { useEffect, useState } from 'react'
+import { PatternRow } from './features'
 
-const DrumpadPage: FC = () => {
+// const initialConfig = {
+//   beats: 4,
+//   columns: 4,
+// }
+
+const DrumpadPage = () => {
   const [sounds, setSounds] = useState<Record<number, { name: string; sound: string }> | undefined>()
+  const [activeTact, setActiveTact] = useState(1)
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -16,12 +22,12 @@ const DrumpadPage: FC = () => {
 
     fetchItems()
   }, [])
+  setInterval(() => {
+    setActiveTact((prev) => prev + 1)
+  }, 1000)
+  console.log(activeTact)
 
-  const handlePlayDrum = (sound: string): void => {
-    const audio = new Audio(sound)
-    audio.play()
-  }
-
+  // TODO: обработать загрузку и ошибки
   return (
     <div className='min-h-screen p-8'>
       <Link href='/' className='flex gap-4 items-center'>
@@ -29,14 +35,13 @@ const DrumpadPage: FC = () => {
         <span className='text-4xl'>Назад на главную</span>
       </Link>
       <div className='flex items-center justify-center h-full min-h-full'>
-        <div>
+        <div className='flex flex-col gap-4'>
           {sounds &&
-            Object.values(sounds).map((item) => {
+            Object.values(sounds).map(({ name, sound }) => {
               return (
-                <div key={item.name} className='flex gap-4 items-center'>
-                  <span>{item.name}</span>
-                  <SoundButton color='#ece' onClick={() => handlePlayDrum(item.sound)} />
-                  {/* <audio src={item.sound} controls /> */}
+                <div key={name} className='flex gap-4 items-center justify-end'>
+                  <span>{name}</span>
+                  <PatternRow sound={sound} />
                 </div>
               )
             })}
