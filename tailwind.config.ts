@@ -297,6 +297,38 @@ const config: Config = {
         '80%': { transform: 'translateY(-200%)' },
         '100%': { transform: 'translateY(0)' },
       },
+      ripple: {
+        '0%': {
+          width: '0px',
+          height: '0px',
+          opacity: '0.8',
+          transform: 'translate(-50%, -50%) scale(0)',
+          borderWidth: '2px',
+          borderColor: 'rgba(255, 255, 255, 0.8)',
+        },
+        '25%': {
+          opacity: '0.6',
+          borderColor: 'rgba(255, 255, 255, 0.6)',
+        },
+        '50%': {
+          width: '300px',
+          height: '300px',
+          opacity: '0.4',
+          borderColor: 'rgba(255, 255, 255, 0.4)',
+        },
+        '75%': {
+          opacity: '0.2',
+          transform: 'translate(-50%, -50%) scale(1.2)',
+          borderColor: 'rgba(255, 255, 255, 0.2)',
+        },
+        '100%': {
+          width: '600px',
+          height: '600px',
+          opacity: '0',
+          transform: 'translate(-50%, -50%) scale(1.4)',
+          borderColor: 'rgba(255, 255, 255, 0)',
+        },
+      },
     },
     animation: {
       popup: 'popup .3s ease-in-out 1',
@@ -308,6 +340,7 @@ const config: Config = {
       fastbg: 'bg .2s ease-in-out 1',
       slideX: 'slideX 5s infinite',
       slideY: 'slideY 5s infinite',
+      ripple: 'ripple 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards',
     },
     transitionProperty: {
       height: 'height',
