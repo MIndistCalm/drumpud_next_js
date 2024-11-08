@@ -24,12 +24,27 @@ export const useDrumpadData = () => {
 
     const fetchItems = async () => {
       try {
-        const response = await fetch('/api/drumpad')
+        const basePath =
+          process.env.NODE_ENV === 'production' ? '/drumpud_next_js/data/drumpad.json' : '/data/drumpad.json'
+
+        const response = await fetch(basePath)
         if (!response.ok) throw new Error('Ошибка загрузки данных')
-        const result = await response.json()
+        const result = (await response.json()) as Record<number, { name: string; sound: string }>
+
+        const modifiedResult = Object.entries(result).reduce((acc, [key, value]) => {
+          const soundPath = process.env.NODE_ENV === 'production' ? `/drumpud_next_js${value.sound}` : value.sound
+
+          return {
+            ...acc,
+            [key]: {
+              ...value,
+              sound: soundPath,
+            },
+          }
+        }, {})
 
         if (isMounted) {
-          setSounds(result)
+          setSounds(modifiedResult)
           clearInterval(progressInterval)
           setTimeout(() => {
             setProgress(100)

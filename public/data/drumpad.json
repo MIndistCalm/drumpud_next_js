@@ -1,0 +1,26 @@
+{
+  "0": {
+    "name": "Kick",
+    "sound": "/drumpud_next_js/sounds/kick.mp3"
+  },
+  "1": {
+    "name": "Hi-hat",
+    "sound": "/drumpud_next_js/sounds/hihat.mp3"
+  },
+  "2": {
+    "name": "Snare",
+    "sound": "/drumpud_next_js/sounds/snare.mp3"
+  },
+  "3": {
+    "name": "Tom",
+    "sound": "/drumpud_next_js/sounds/tom.mp3"
+  },
+  "4": {
+    "name": "Kick20",
+    "sound": "/drumpud_next_js/sounds/Kick_20_828.wav"
+  },
+  "5": {
+    "name": "TapeKick",
+    "sound": "/drumpud_next_js/sounds/TapeKicks_506_SP_31.wav"
+  }
+}
