@@ -34,7 +34,7 @@ export const PatternRow = ({
   return (
     <div className='flex gap-2'>
       {soundRow.map((sound, index) => {
-        const color = activeTact === index ? '#ece' : selectedBeats[name]?.includes(index) ? '#ece' : '#000'
+        const color = activeTact === index ? '#f9f' : selectedBeats[name]?.includes(index) ? '#ece' : '#000'
 
         return (
           <div key={sound + index} className={`${index % 4 === 0 ? 'ml-4' : ''}`}>

@@ -1,3 +1,4 @@
+import { nextui } from '@nextui-org/theme'
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
@@ -5,12 +6,61 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
+      },
+      animation: {
+        ripple: 'ripple 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards',
+        'wave-ripple': 'wave-ripple 2s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+      },
+      keyframes: {
+        ripple: {
+          '0%': {
+            width: '0px',
+            height: '0px',
+            opacity: '0.8',
+            transform: 'translate(-50%, -50%) scale(0)',
+            borderWidth: '2px',
+            borderColor: 'rgba(255, 255, 255, 0.8)',
+          },
+          '25%': {
+            opacity: '0.6',
+            borderColor: 'rgba(255, 255, 255, 0.6)',
+          },
+          '50%': {
+            width: '300px',
+            height: '300px',
+            opacity: '0.4',
+            borderColor: 'rgba(255, 255, 255, 0.4)',
+          },
+          '75%': {
+            opacity: '0.2',
+            transform: 'translate(-50%, -50%) scale(1.2)',
+            borderColor: 'rgba(255, 255, 255, 0.2)',
+          },
+          '100%': {
+            width: '600px',
+            height: '600px',
+            opacity: '0',
+            transform: 'translate(-50%, -50%) scale(1.4)',
+            borderColor: 'rgba(255, 255, 255, 0)',
+          },
+        },
+        'wave-ripple': {
+          '0%': {
+            transform: 'scale(0)',
+            opacity: '0.8',
+          },
+          '100%': {
+            transform: 'scale(10)',
+            opacity: '0',
+          },
+        },
       },
     },
     colors: {
@@ -253,95 +303,6 @@ const config: Config = {
       light: '0 2px 25px 0 rgba(185, 185, 185, 0.30)',
       none: '0 0 0 0',
     },
-    keyframes: {
-      popup: {
-        '0%': { opacity: '0' },
-        '100%': { opacity: '100%' },
-      },
-      bg: {
-        '0%': { opacity: '0' },
-        '100%': { opacity: '50%' },
-      },
-      popover: {
-        '0%': { opacity: '100%' },
-        '100%': { opacity: '0' },
-      },
-      spin: {
-        '0%': { transform: 'rotate(0deg)' },
-        '100%': { transform: 'rotate(360deg)' },
-      },
-      showFromLeft: {
-        '0%': { transform: 'translateX(-100%)' },
-        '100%': { transform: 'translateX(0)' },
-      },
-      hideFromRight: {
-        '0%': { transform: 'translateX(0)' },
-        '100%': { transform: 'translateX(-100%)' },
-      },
-      slideX: {
-        '0%': { transform: 'translateX(0)' },
-        '33%': { transform: 'translateX(-100%)' },
-        '50%': { transform: 'translateX(0)' },
-        '66%': { transform: 'translateX(100%)' },
-        '100%': { transform: 'translateX(0)' },
-      },
-      slideY: {
-        '0%': { transform: 'translateY(0)' },
-        '10%': { transform: 'translateY(0)' },
-        '20%': { transform: 'translateY(0)' },
-        '30%': { transform: 'translateY(-100%)' },
-        '40%': { transform: 'translateY(-100%)' },
-        '50%': { transform: 'translateY(-100%)' },
-        '60%': { transform: 'translateY(-200%)' },
-        '70%': { transform: 'translateY(-200%)' },
-        '80%': { transform: 'translateY(-200%)' },
-        '100%': { transform: 'translateY(0)' },
-      },
-      ripple: {
-        '0%': {
-          width: '0px',
-          height: '0px',
-          opacity: '0.8',
-          transform: 'translate(-50%, -50%) scale(0)',
-          borderWidth: '2px',
-          borderColor: 'rgba(255, 255, 255, 0.8)',
-        },
-        '25%': {
-          opacity: '0.6',
-          borderColor: 'rgba(255, 255, 255, 0.6)',
-        },
-        '50%': {
-          width: '300px',
-          height: '300px',
-          opacity: '0.4',
-          borderColor: 'rgba(255, 255, 255, 0.4)',
-        },
-        '75%': {
-          opacity: '0.2',
-          transform: 'translate(-50%, -50%) scale(1.2)',
-          borderColor: 'rgba(255, 255, 255, 0.2)',
-        },
-        '100%': {
-          width: '600px',
-          height: '600px',
-          opacity: '0',
-          transform: 'translate(-50%, -50%) scale(1.4)',
-          borderColor: 'rgba(255, 255, 255, 0)',
-        },
-      },
-    },
-    animation: {
-      popup: 'popup .3s ease-in-out 1',
-      popover: 'popover .3s ease-in-out 1',
-      spin: 'spin 1s linear infinite',
-      menu: 'showFromLeft .3s ease-in-out 1',
-      menuout: 'hideFromRight .3s ease-in-out 1 forwards',
-      bg: 'bg .4s ease-in-out 1',
-      fastbg: 'bg .2s ease-in-out 1',
-      slideX: 'slideX 5s infinite',
-      slideY: 'slideY 5s infinite',
-      ripple: 'ripple 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards',
-    },
     transitionProperty: {
       height: 'height',
     },
@@ -368,6 +329,7 @@ const config: Config = {
       xxl: { min: '1401px' },
     },
   },
-  plugins: [],
+  darkMode: 'class',
+  plugins: [nextui()],
 }
 export default config
