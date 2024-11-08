@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect, useMemo } from 'react'
+'use client'
+import { useState, useCallback, useEffect } from 'react'
 
 interface RippleType {
   x: number
@@ -34,63 +35,27 @@ export const useRipple = () => {
     }
   }, [containerSize])
 
-  const createRipple = useCallback(() => {
+  const createRipple = useCallback((x: number, y: number) => {
     setRipples((prev) => {
-      if (prev.length >= MAX_RIPPLES) {
-        return [
-          ...prev.slice(1),
-          {
-            x: getRandomPosition().x,
-            y: getRandomPosition().y,
-            id: Date.now(),
-            color: getRandomColor(),
-          },
-        ]
+      const newRipple = {
+        x,
+        y,
+        id: Date.now(),
+        color: getRandomColor(),
+        isAnimating: true,
       }
 
-      return [
-        ...prev,
-        {
-          x: getRandomPosition().x,
-          y: getRandomPosition().y,
-          id: Date.now(),
-          color: getRandomColor(),
-        },
-      ]
+      if (prev.length >= MAX_RIPPLES) {
+        return [...prev.slice(1), newRipple]
+      }
+      return [...prev, newRipple]
     })
-  }, [getRandomPosition])
+  }, [])
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation()
     const rect = e.currentTarget.getBoundingClientRect()
-    setRipples((prev) => {
-      if (prev.length >= MAX_RIPPLES) {
-        return [
-          ...prev.slice(1),
-          {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-            id: Date.now(),
-            color: getRandomColor(),
-          },
-        ]
-      }
-
-      return [
-        ...prev,
-        {
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top,
-          id: Date.now(),
-          color: getRandomColor(),
-        },
-      ]
-    })
-  }
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation()
-    handleClick(e)
+    createRipple(e.clientX - rect.left, e.clientY - rect.top)
   }
 
   useEffect(() => {
@@ -112,9 +77,13 @@ export const useRipple = () => {
   useEffect(() => {
     if (containerSize.width === 0) return
 
-    const interval = setInterval(createRipple, 200)
+    const interval = setInterval(() => {
+      const { x, y } = getRandomPosition()
+      createRipple(x, y)
+    }, 200)
+
     return () => clearInterval(interval)
-  }, [containerSize.width, createRipple])
+  }, [containerSize.width, createRipple, getRandomPosition])
 
   useEffect(() => {
     if (ripples.length === 0) return
@@ -124,37 +93,37 @@ export const useRipple = () => {
       setRipples((prev) => prev.filter((ripple) => now - ripple.id < 1500))
     }
 
-    const cleanupInterval = setInterval(cleanup, 200)
+    const cleanupInterval = setInterval(cleanup, 1600)
     return () => clearInterval(cleanupInterval)
   }, [ripples.length])
 
-  const RipplesComponent = useMemo(() => {
-    return (
-      <>
-        {ripples.map((ripple) => (
-          <span
-            key={ripple.id}
-            className='absolute rounded-full pointer-events-none animate-ripple'
-            style={{
-              left: ripple.x,
-              top: ripple.y,
-              transform: 'translate(-50%, -50%)',
-              background: `radial-gradient(circle, ${ripple.color} 0%, ${ripple.color.replace(
-                '0.3',
-                '0.2',
-              )} 50%, ${ripple.color.replace('0.3', '0')} 70%)`,
-              borderColor: ripple.color.replace('0.3', '0.5'),
-            }}
-          />
-        ))}
-      </>
-    )
-  }, [ripples])
+  const RipplesComponent = () => (
+    <>
+      {ripples.map((ripple) => (
+        <span
+          key={ripple.id}
+          style={{
+            position: 'absolute',
+            left: ripple.x,
+            top: ripple.y,
+            borderRadius: '50%',
+            pointerEvents: 'none',
+            backgroundColor: ripple.color,
+            transform: 'translate(-50%, -50%)',
+            animation: 'ripple 1.5s ease-out forwards',
+            width: '0',
+            height: '0',
+            opacity: '0.8',
+          }}
+        />
+      ))}
+    </>
+  )
 
   return {
     RIPPLE_ID,
     Ripples: RipplesComponent,
     onClick: handleClick,
-    onMouseDown: handleMouseDown,
+    onMouseDown: handleClick,
   }
 }
