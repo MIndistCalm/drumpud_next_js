@@ -26,10 +26,12 @@ export const useDrumpadData = () => {
 
     const fetchSounds = async () => {
       if (!apiUrl) return
-
       try {
+        const basePath =
+          process.env.NODE_ENV === 'production' ? '/drumpud_next_js/data/drumpad.json' : '/data/drumpad.json'
+
         // Получаем список всех звуков
-        const response = await fetch(apiUrl)
+        const response = await fetch(basePath)
         if (!response.ok) throw new Error('Ошибка загрузки данных')
         const result = await response.json()
 
