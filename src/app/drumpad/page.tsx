@@ -24,14 +24,13 @@ const DrumpadPage = () => {
     pageReady,
     progress,
   })
-  const { squareSize, setSquareSize, selectedBeats, activeTact, handleBeatSelect, isPlaying, togglePlay } =
+  const { squareSize, selectedBeats, activeTact, isPlaying, handleBeatToggle, setSquareSize, togglePlay, resetBeats } =
     useBeatsControl(initialConfig.tacts)
 
   if (showLoader) {
     return <LoaderView visible={loaderVisible} progress={progress} />
   }
 
-  
   return (
     <div
       className={`min-h-screen h-screen flex flex-col p-8 transition-opacity duration-500 ease-in ${
@@ -42,11 +41,17 @@ const DrumpadPage = () => {
         <span className='text-3xl'>←</span>
         <span className='text-4xl'>Назад на главную</span>
       </Link>
+      {/* Настройки */}
       <div className='flex-1 flex flex-col gap-6 items-center justify-center'>
         <div className='flex flex-col gap-4 items-center w-full justify-center'>
-          <Button color={isPlaying ? 'danger' : 'success'} onClick={togglePlay}>
-            {isPlaying ? 'Стоп' : 'Играть'}
-          </Button>
+          <div className='flex flex-row gap-4'>
+            <Button color={isPlaying ? 'danger' : 'success'} onClick={togglePlay}>
+              {isPlaying ? 'Стоп' : 'Играть'}
+            </Button>
+            <Button color='secondary' onClick={resetBeats}>
+              Сбросить
+            </Button>
+          </div>
           <Slider
             size='md'
             step={1}
@@ -71,7 +76,7 @@ const DrumpadPage = () => {
                   activeTact={activeTact}
                   squareSize={squareSize}
                   selectedBeats={selectedBeats}
-                  onClick={(value) => handleBeatSelect(name, value)}
+                  onBeatToggle={(value) => handleBeatToggle(name, value)}
                 />
               </div>
             ))}

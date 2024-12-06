@@ -32,13 +32,28 @@ export const useBeatsControl = (tacts: number) => {
     return () => {
       if (interval) clearInterval(interval)
     }
-  }, [getActiveTact, isPlaying, playBeats, selectedBeats])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getActiveTact, isPlaying, playBeats])
 
-  const handleBeatSelect = useCallback((name: string, value: number) => {
-    setSelectedBeats((prev) => ({
-      ...prev,
-      ...(prev[name]?.length > 0 ? { [name]: [...prev[name], value] } : { [name]: [value] }),
-    }))
+  const handleBeatToggle = useCallback((name: string, value: number) => {
+    setSelectedBeats((prev) => {
+      const currentBeats = prev[name] || []
+      if (currentBeats.includes(value)) {
+        return {
+          ...prev,
+          [name]: currentBeats.filter((beat) => beat !== value),
+        }
+      } else {
+        return {
+          ...prev,
+          [name]: [...currentBeats, value],
+        }
+      }
+    })
+  }, [])
+
+  const resetBeats = useCallback(() => {
+    setSelectedBeats({})
   }, [])
 
   const togglePlay = useCallback(() => {
@@ -47,11 +62,12 @@ export const useBeatsControl = (tacts: number) => {
 
   return {
     squareSize,
-    setSquareSize,
     selectedBeats,
     activeTact,
-    handleBeatSelect,
     isPlaying,
+    setSquareSize,
+    handleBeatToggle,
     togglePlay,
+    resetBeats,
   }
 }
