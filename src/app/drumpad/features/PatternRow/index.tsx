@@ -7,7 +7,7 @@ interface PatternRowProps {
   activeTact: number
   squareSize?: number
   selectedBeats: Record<string, number[]>
-  onClick?: (index: number) => void
+  onBeatToggle?: (index: number) => void
 }
 
 export const PatternRow = ({
@@ -16,20 +16,25 @@ export const PatternRow = ({
   activeTact,
   squareSize = 4,
   selectedBeats,
-  onClick = () => {},
+  onBeatToggle = () => {},
 }: PatternRowProps) => {
   const soundRow = Array.from({ length: 4 * squareSize }, (_, index) => index + 1)
-  //   console.log(soundRow, sound)
+  let isPlaying = false // Флаг для отслеживания состояния воспроизведения
 
   const handlePlayDrum = (sound: string): void => {
+    if (isPlaying) return // Если уже воспроизводится, ничего не делаем
+    isPlaying = true // Устанавливаем флаг воспроизведения
+
     const audio = new Audio(sound)
     audio.play()
   }
+
   useEffect(() => {
     if (selectedBeats[name]?.includes(activeTact)) {
       handlePlayDrum(sound)
     }
-  }, [activeTact, name, selectedBeats, sound])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTact, sound])
 
   return (
     <div className='flex gap-2'>
@@ -38,7 +43,7 @@ export const PatternRow = ({
 
         return (
           <div key={sound + index} className={`${index % 4 === 0 ? 'ml-4' : ''}`}>
-            <SoundButton color={color} onClick={() => onClick(index)} />
+            <SoundButton color={color} onClick={() => onBeatToggle(index)} />
           </div>
         )
       })}

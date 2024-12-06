@@ -22,29 +22,15 @@ export const useDrumpadData = () => {
       })
     }, 100)
 
-    const fetchItems = async () => {
+    const fetchSounds = async () => {
       try {
-        const basePath =
-          process.env.NODE_ENV === 'production' ? '/drumpud_next_js/data/drumpad.json' : '/data/drumpad.json'
-
-        const response = await fetch(basePath)
+        // Получаем список всех звуков
+        const response = await fetch('/api/drumpad')
         if (!response.ok) throw new Error('Ошибка загрузки данных')
-        const result = (await response.json()) as Record<number, { name: string; sound: string }>
-
-        const modifiedResult = Object.entries(result).reduce((acc, [key, value]) => {
-          const soundPath = process.env.NODE_ENV === 'production' ? `/drumpud_next_js${value.sound}` : value.sound
-
-          return {
-            ...acc,
-            [key]: {
-              ...value,
-              sound: soundPath,
-            },
-          }
-        }, {})
+        const result = await response.json()
 
         if (isMounted) {
-          setSounds(modifiedResult)
+          setSounds(result)
           clearInterval(progressInterval)
           setTimeout(() => {
             setProgress(100)
@@ -62,12 +48,25 @@ export const useDrumpadData = () => {
       }
     }
 
-    fetchItems()
+    fetchSounds()
     return () => {
       isMounted = false
       clearInterval(progressInterval)
     }
   }, [])
+
+  // // Функция для загрузки конкретного звука
+  // const loadSound = async (id: number) => {
+  //   try {
+  //     const response = await fetch(`/api/drumpad?id=${id}`)
+  //     if (!response.ok) throw new Error('Ошибка загрузки звука')
+  //     const audioBlob = await response.blob()
+  //     return URL.createObjectURL(audioBlob)
+  //   } catch (err) {
+  //     console.error('Ошибка загрузки звука:', err)
+  //     return null
+  //   }
+  // }
 
   return { sounds, isLoading, error, progress }
 }

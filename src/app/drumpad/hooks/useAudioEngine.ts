@@ -26,6 +26,7 @@ export const useAudioEngine = () => {
 
     try {
       const response = await fetch(url)
+      console.log('first')
       const arrayBuffer = await response.arrayBuffer()
       const audioBuffer = await audioState.current.context.decodeAudioData(arrayBuffer)
       audioState.current.buffers.set(name, audioBuffer)
@@ -48,11 +49,17 @@ export const useAudioEngine = () => {
   // Воспроизведение звуков для активного такта
   const playBeats = useCallback(
     (activeTact: number, selectedBeats: Record<string, number[]>) => {
-      Object.entries(selectedBeats).forEach(([name, beats]) => {
+      const playPromises = Object.entries(selectedBeats).map(([name, beats]) => {
         if (beats.includes(activeTact)) {
-          playSound(name)
+          return new Promise<void>((resolve) => {
+            playSound(name)
+            resolve()
+          })
         }
+        return Promise.resolve()
       })
+
+      Promise.all(playPromises).then(() => {})
     },
     [playSound],
   )
