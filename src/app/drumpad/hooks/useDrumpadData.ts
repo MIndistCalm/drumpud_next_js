@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
+
 export const useDrumpadData = () => {
   const [sounds, setSounds] = useState<Record<number, { name: string; sound: string }>>()
   const [isLoading, setIsLoading] = useState(false)
@@ -23,9 +25,11 @@ export const useDrumpadData = () => {
     }, 100)
 
     const fetchSounds = async () => {
+      if (!apiUrl) return
+
       try {
         // Получаем список всех звуков
-        const response = await fetch('/api/drumpad')
+        const response = await fetch(apiUrl)
         if (!response.ok) throw new Error('Ошибка загрузки данных')
         const result = await response.json()
 
