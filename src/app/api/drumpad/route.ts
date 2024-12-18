@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import path from 'path'
 import fs from 'fs'
 
@@ -31,10 +31,9 @@ const sounds: Record<number, { name: string; sound: string }> = {
 }
 
 // Обработка GET-запроса
-export async function GET(req: Request) {
-  const url = new URL(req.url)
-  const id = url.searchParams.get('id')
-  
+export async function GET(req: NextRequest) {
+  const id = req.nextUrl.searchParams.get('id')
+
   // Если id не указан, возвращаем список всех звуков
   if (!id) {
     return NextResponse.json(sounds)
